@@ -1,0 +1,17 @@
+dual_scan_merger:
+  ros__parameters:
+    front_scan_topic: "/scan"
+    back_scan_topic: "/scan_back"
+    output_scan_topic: "/scan_amcl"
+    target_frame: "base_link"
+    angle_min: -3.1415926
+    angle_max: 3.1415926
+    angle_increment: 0.00872665
+    range_min: 0.1
+    range_max: 40.0
+    publish_rate_hz: 10.0
+    scan_timeout_sec: 0.3
+    max_scan_time_skew_sec: 0.10
+    tf_timeout_sec: 0.05
+    stats_log_period_sec: 5.0
+    use_sim_time: false

@@ -1,0 +1,98 @@
+{
+  "hector": {
+    "algorithm": "hector",
+    "ekf": false,
+    "time": false,
+    "pre": false,
+    "desk": false,
+    "domain": 160
+  },
+  "hector_ekf_time": {
+    "algorithm": "hector",
+    "ekf": true,
+    "time": true,
+    "pre": false,
+    "desk": false,
+    "domain": 161
+  },
+  "hector_ekf_pre": {
+    "algorithm": "hector",
+    "ekf": true,
+    "time": false,
+    "pre": true,
+    "desk": false,
+    "domain": 162
+  },
+  "hector_ekf_desk": {
+    "algorithm": "hector",
+    "ekf": true,
+    "time": false,
+    "pre": false,
+    "desk": true,
+    "domain": 163
+  },
+  "hector_ekf_time_pre": {
+    "algorithm": "hector",
+    "ekf": true,
+    "time": true,
+    "pre": true,
+    "desk": false,
+    "domain": 164
+  },
+  "hector_ekf_time_desk": {
+    "algorithm": "hector",
+    "ekf": true,
+    "time": true,
+    "pre": false,
+    "desk": true,
+    "domain": 165
+  },
+  "hector_ekf_pre_desk": {
+    "algorithm": "hector",
+    "ekf": true,
+    "time": false,
+    "pre": true,
+    "desk": true,
+    "domain": 166
+  },
+  "hector_ekf_desk_pre_time": {
+    "algorithm": "hector",
+    "ekf": true,
+    "time": true,
+    "pre": true,
+    "desk": true,
+    "domain": 167
+  },
+  "amcl_ekf_pre": {
+    "algorithm": "amcl",
+    "ekf": true,
+    "time": false,
+    "pre": true,
+    "desk": false,
+    "domain": 168
+  },
+  "amcl_ekf_desk_pre": {
+    "algorithm": "amcl",
+    "ekf": true,
+    "time": false,
+    "pre": true,
+    "desk": true,
+    "domain": 169
+  },
+  "amcl_ekf_time_pre": {
+    "algorithm": "amcl",
+    "ekf": true,
+    "time": true,
+    "pre": true,
+    "desk": false,
+    "domain": 170
+  },
+  "amcl_ekf_desk_pre_time": {
+    "algorithm": "amcl",
+    "ekf": true,
+    "time": true,
+    "pre": true,
+    "desk": true,
+    "domain": 171
+  }
+}

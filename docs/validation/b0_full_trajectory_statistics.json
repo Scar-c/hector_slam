@@ -1,0 +1,35 @@
+{
+  "runs": [
+    {
+      "mode": "upstream_voxel",
+      "poses": 18934,
+      "start_xy": [
+        0.0,
+        0.0
+      ],
+      "end_xy": [
+        -58.31329345703125,
+        5.1629638671875
+      ],
+      "path_length_m": 627.3528896348685,
+      "duration_s": 513.5801107883453
+    },
+    {
+      "mode": "fixed_final",
+      "poses": 18934,
+      "start_xy": [
+        0.0,
+        0.0
+      ],
+      "end_xy": [
+        -17.496856689453125,
+        -14.358261108398438
+      ],
+      "path_length_m": 616.0425921299968,
+      "duration_s": 513.5801107883453
+    }
+  ],
+  "comparison": "Between-run disagreement only, not ATE against ground truth",
+  "between_run_end_distance_m": 45.24050299839198,
+  "between_run_max_distance_m": 51.19202882449113
+}

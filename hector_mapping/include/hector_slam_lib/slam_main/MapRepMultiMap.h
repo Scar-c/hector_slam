@@ -29,6 +29,8 @@
 #ifndef _hectormaprepmultimap_h__
 #define _hectormaprepmultimap_h__
 
+#include <cstdint>
+#include <stdexcept>
 #include "MapRepresentationInterface.h"
 #include "MapProcContainer.h"
 
@@ -78,6 +80,32 @@ public:
     for (unsigned int i = 0; i < size; ++i){
       mapContainer[i].cleanup();
     }
+  }
+
+  // Load a fixed trinary raster. Core world coordinates are metres from its
+  // lower-left corner. ROS adapter handles the YAML origin (including yaw).
+  void loadStaticMap(const std::vector<int8_t>& cells, int width, int height)
+  {
+    if (cells.size() != static_cast<size_t>(width)*height)
+      throw std::invalid_argument("Static map data size mismatch");
+    for (size_t level=0; level<mapContainer.size(); ++level) {
+      auto& grid=mapContainer[level].getGridMap();
+      const int stride=1 << level;
+      grid.clear();
+      grid.setMapTransformation(Eigen::Vector2f::Constant(-0.5f*grid.getCellLength()), grid.getCellLength());
+      for (int y=0;y<grid.getSizeY();++y) for(int x=0;x<grid.getSizeX();++x) {
+        bool occupied=false, all_free=true;
+        for(int dy=0;dy<stride;++dy) for(int dx=0;dx<stride;++dx) {
+          const int sx=x*stride+dx, sy=y*stride+dy;
+          const int value=(sx<width && sy<height) ? cells[sy*width+sx] : -1;
+          occupied |= value>50;
+          all_free &= value==0;
+        }
+        // Occupied wins; otherwise retain unknown if any child is unknown.
+        grid.getCell(x,y).set(occupied ? 4.59512f : (all_free ? -4.59512f : 0.0f));
+      }
+    }
+    onMapUpdated();
   }
 
   virtual void reset()
@@ -140,6 +168,8 @@ public:
       if (i==0){
         mapContainer[i].updateByScan(dataContainer, robotPoseWorld);
       }else{
+        // Also populate coarse scans when known-pose mapping bypasses matchData().
+        dataContainers[i-1].setFrom(dataContainer, 1.0f / static_cast<float>(1u << i));
         mapContainer[i].updateByScan(dataContainers[i-1], robotPoseWorld);
       }
     }

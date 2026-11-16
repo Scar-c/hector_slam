@@ -202,7 +202,10 @@ protected:
 
 
       //H += Eigen::Matrix3f::Identity() * 1.0f;
-      Eigen::Vector3f searchDir (H.inverse() * dTr);
+      Eigen::FullPivLU<Eigen::Matrix3f> solver(H);
+      if (!solver.isInvertible()) return false;
+      Eigen::Vector3f searchDir = solver.solve(dTr);
+      if (!searchDir.allFinite()) return false;
 
       //std::cout << "\nsearchdir\n" << searchDir  << "\n";
 

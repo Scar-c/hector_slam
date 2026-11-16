@@ -1,0 +1,35 @@
+/**:
+  ros__parameters:
+    use_imu: false
+    imu_topic: imu
+    imu_time_tolerance: 0.05
+    imu_gravity: 9.80665
+    imu_gravity_time_constant: 0.5
+    map_frame: map
+    base_frame: base_link
+    # Use base_link for lidar-only mapping, odom when an external odom TF exists.
+    odom_frame: base_link
+    scan_topic: scan
+    pub_map_odom_transform: true
+    pub_map_scanmatch_transform: false
+    pub_odometry: false
+    use_tf_scan_transformation: true
+    use_tf_pose_start_estimate: false
+    map_with_known_poses: false
+    map_resolution: 0.05
+    map_size: 1024
+    map_start_x: 0.5
+    map_start_y: 0.5
+    map_multi_res_levels: 3
+    map_pub_period: 1.0
+    update_factor_free: 0.4
+    update_factor_occupied: 0.9
+    map_update_distance_thresh: 0.4
+    map_update_angle_thresh: 0.13
+    laser_min_dist: 0.1
+    laser_max_dist: 30.0
+    laser_z_min_value: -1.0
+    laser_z_max_value: 1.0
+    min_scan_points: 20
+    scan_subscriber_queue_size: 5
+    tf_timeout: 0.1

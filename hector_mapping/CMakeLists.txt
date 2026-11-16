@@ -1,100 +1,56 @@
-cmake_minimum_required(VERSION 3.0.2)
-project(hector_mapping)
-
-find_package(catkin REQUIRED COMPONENTS 
-  roscpp
-  nav_msgs
-  visualization_msgs
-  tf
-  message_filters
-  laser_geometry
-  message_generation
-  std_srvs)
-
-find_package(Boost REQUIRED COMPONENTS thread)
-
+cmake_minimum_required(VERSION 3.16)
+project(hector_mapping VERSION 0.6.0 LANGUAGES C CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+find_package(ament_cmake REQUIRED)
 find_package(Eigen3 REQUIRED)
-
-#######################################
-## Declare ROS messages and services ##
-#######################################
-
-## Generate messages in the 'msg' folder
-add_message_files(
-  FILES
-  HectorDebugInfo.msg
-  HectorIterData.msg
-)
-
-## Generate services in the 'srv' folder
-add_service_files(
-  FILES
-  ResetMapping.srv
-)
-
-generate_messages(
-  DEPENDENCIES
-  geometry_msgs
-)
-
-###################################
-## catkin specific configuration ##
-###################################
-catkin_package(
-  INCLUDE_DIRS include
-#  LIBRARIES hector_mapping
-  CATKIN_DEPENDS roscpp nav_msgs visualization_msgs tf message_filters laser_geometry message_runtime
-  DEPENDS EIGEN3
-)
-
-###########
-## Build ##
-###########
-
-include_directories(include/hector_slam_lib)
-include_directories(
-  ${Boost_INCLUDE_DIRS}
-  ${catkin_INCLUDE_DIRS}
-  ${EIGEN3_INCLUDE_DIRS}
-)
-
-add_executable(hector_mapping
-  src/HectorDebugInfoProvider.h
-  src/HectorDrawings.h
-  src/HectorMappingRos.h
-  src/HectorMappingRos.cpp
-  src/main.cpp
-  src/PoseInfoContainer.cpp
-  src/PoseInfoContainer.h
-)
-
-add_dependencies(hector_mapping hector_mapping_generate_messages_cpp)
-
-target_link_libraries(hector_mapping
-  ${catkin_LIBRARIES}
-  ${Boost_LIBRARIES}
-)
-
-#############
-## Install ##
-#############
-
-# all install targets should use catkin DESTINATION variables
-# See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
-
-install(TARGETS hector_mapping
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
-
-## Don't ask why it's hector_slam_lib, this was Stefan Kohlbrecher's first ROS package and a wrapper of a pre ROS header only library
-install(DIRECTORY include/hector_slam_lib/
-  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-  FILES_MATCHING PATTERN "*.h"
-  PATTERN ".svn" EXCLUDE
-)
-
-install(DIRECTORY launch/
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch/
-)
+find_package(yaml-cpp REQUIRED)
+find_package(eigen3_cmake_module REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rcl_interfaces REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(std_srvs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+rosidl_generate_interfaces(${PROJECT_NAME} "srv/ResetMapping.srv" DEPENDENCIES geometry_msgs)
+add_executable(matrix_base_pose_from_tf src/matrix_base_pose_from_tf.cpp)
+target_include_directories(matrix_base_pose_from_tf PRIVATE include)
+ament_target_dependencies(matrix_base_pose_from_tf geometry_msgs rclcpp tf2 tf2_ros)
+install(TARGETS matrix_base_pose_from_tf DESTINATION lib/${PROJECT_NAME})
+add_executable(time_aligned_scan_merger_node src/time_aligned_scan_merger.cpp)
+ament_target_dependencies(time_aligned_scan_merger_node rclcpp nav_msgs sensor_msgs geometry_msgs std_msgs tf2 tf2_ros)
+install(TARGETS time_aligned_scan_merger_node DESTINATION lib/${PROJECT_NAME})
+add_executable(hector_base_pose_from_tf src/hector_base_pose_from_tf.cpp)
+target_include_directories(hector_base_pose_from_tf PRIVATE include)
+ament_target_dependencies(hector_base_pose_from_tf geometry_msgs rclcpp tf2 tf2_ros)
+install(TARGETS hector_base_pose_from_tf DESTINATION lib/${PROJECT_NAME})
+add_executable(hector_mapping_node src/hector_mapping_node.cpp)
+target_include_directories(hector_mapping_node PRIVATE include)
+target_link_libraries(hector_mapping_node Eigen3::Eigen yaml-cpp)
+ament_target_dependencies(hector_mapping_node rclcpp rcl_interfaces sensor_msgs geometry_msgs nav_msgs std_msgs std_srvs tf2 tf2_ros tf2_geometry_msgs)
+rosidl_get_typesupport_target(typesupport_target ${PROJECT_NAME} rosidl_typesupport_cpp)
+target_link_libraries(hector_mapping_node "${typesupport_target}")
+install(PROGRAMS scripts/backpack_bridge.py DESTINATION lib/${PROJECT_NAME})
+install(TARGETS hector_mapping_node DESTINATION lib/${PROJECT_NAME})
+install(DIRECTORY include/ DESTINATION include)
+install(DIRECTORY config launch DESTINATION share/${PROJECT_NAME})
+install(FILES LICENSE UPSTREAM.md DESTINATION share/${PROJECT_NAME})
+if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
+  ament_add_gtest(test_prior test/test_prior.cpp)
+  target_include_directories(test_prior PRIVATE include)
+  target_link_libraries(test_prior Eigen3::Eigen yaml-cpp)
+  ament_target_dependencies(test_prior nav_msgs tf2)
+  ament_add_gtest(test_mapping test/test_mapping.cpp)
+  target_include_directories(test_mapping PRIVATE include)
+  target_link_libraries(test_mapping Eigen3::Eigen)
+  ament_target_dependencies(test_mapping sensor_msgs tf2)
+endif()
+ament_export_include_directories(include)
+ament_export_dependencies(Eigen3 eigen3_cmake_module rosidl_default_runtime)
+ament_package()

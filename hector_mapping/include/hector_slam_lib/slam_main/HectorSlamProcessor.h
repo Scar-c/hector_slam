@@ -44,6 +44,7 @@
 
 
 #include <float.h>
+#include <iostream>
 
 namespace hectorslam{
 
@@ -86,7 +87,7 @@ public:
 
     //std::cout << "\n1";
     //std::cout << "\n" << lastScanMatchPose << "\n";
-    if(util::poseDifferenceLargerThan(newPoseEstimateWorld, lastMapUpdatePose, paramMinDistanceDiffForMapUpdate, paramMinAngleDiffForMapUpdate) || map_without_matching){
+    if(!localizationOnly && (util::poseDifferenceLargerThan(newPoseEstimateWorld, lastMapUpdatePose, paramMinDistanceDiffForMapUpdate, paramMinAngleDiffForMapUpdate) || map_without_matching)){
 
       mapRep->updateByScan(dataContainer, newPoseEstimateWorld);
 
@@ -112,15 +113,35 @@ public:
     }
   }
 
+  void loadStaticMap(const std::vector<int8_t>& cells, int width, int height) {
+    static_cast<MapRepMultiMap*>(mapRep)->loadStaticMap(cells,width,height);
+    localizationOnly=true;
+    reset();
+  }
+  Eigen::Vector3f matchStatic(const DataContainer& data, const Eigen::Vector3f& hint) {
+    Eigen::Matrix3f hessian;
+    return mapRep->matchData(hint,data,hessian);
+  }
+  void commitStaticPose(const Eigen::Vector3f& pose, const DataContainer& data) {
+    if(!localizationOnly) throw std::logic_error("No static map loaded");
+    lastScanMatchPose=pose;
+    // Evaluate the Hessian at the accepted pose without taking another optimizer step.
+    OccGridMapUtilConfig<GridMap> util(const_cast<GridMap*>(&mapRep->getGridMap(0)));
+    Eigen::Vector3f derivatives;
+    util.getCompleteHessianDerivs(mapRep->getGridMap(0).getMapCoordsPose(pose),data,lastScanMatchCov,derivatives);
+  }
+  bool isLocalizationOnly() const { return localizationOnly; }
+
   void reset()
   {
     lastMapUpdatePose = Eigen::Vector3f(FLT_MAX, FLT_MAX, FLT_MAX);
     lastScanMatchPose = Eigen::Vector3f::Zero();
+    lastScanMatchCov = Eigen::Matrix3f::Zero();
     //lastScanMatchPose.x() = -10.0f;
     //lastScanMatchPose.y() = -15.0f;
     //lastScanMatchPose.z() = M_PI*0.15f;
 
-    mapRep->reset();
+    if (!localizationOnly) mapRep->reset();
   }
 
   const Eigen::Vector3f& getLastScanMatchPose() const { return lastScanMatchPose; };
@@ -140,6 +161,7 @@ public:
 
 protected:
 
+  bool localizationOnly = false;
   MapRepresentationInterface* mapRep;
 
   Eigen::Vector3f lastMapUpdatePose;

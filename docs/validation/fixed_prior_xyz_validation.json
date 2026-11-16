@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "frames": 772,
+  "max_xyz_reconstruction_error_m": 1.0066589442763138e-06,
+  "mean_max_xyz_error_m": 4.775802082122389e-07,
+  "exact_cloud_attitude_pose_stamp_sets": true,
+  "range_height_and_voxel_counts_verified": true,
+  "ekf_time_model_unchanged": true,
+  "method": "Reconstruct every original beam using static XYZ extrinsics and EKF source-to-common-time transforms; compare unreprojected XYZ in source order; verify exact reference pairing and filtering counts"
+}

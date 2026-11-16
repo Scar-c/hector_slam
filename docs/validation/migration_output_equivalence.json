@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "frames": 772,
+  "timestamps_identical": true,
+  "pose_arrays_bitwise_equal": true,
+  "maximum_position_difference_m": 0.0,
+  "maximum_quaternion_component_difference": 0.0,
+  "method": "Offline replay of identical recorded XYZ, exact reference attitude, EKF transforms and shared FFT seed; wait for each pose before next input"
+}

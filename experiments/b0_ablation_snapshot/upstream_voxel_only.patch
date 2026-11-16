@@ -1,0 +1,48 @@
+--- before/upstream_node.cpp
++++ after/upstream_node.cpp
+@@ -17,6 +17,7 @@
+ #include <tf2_ros/transform_listener.hpp>
+ #include <laser_geometry/laser_geometry.hpp>
+ #include <hector_slam_lib/slam_main/HectorSlamProcessor.h>
++#include "cartographer/sensor/internal/voxel_filter.h"
+ using namespace std::chrono_literals;
+ class UpstreamBehavior:public rclcpp::Node{
+ public:
+@@ -29,6 +30,7 @@
+   h_->setUpdateFactorFree(.4);h_->setUpdateFactorOccupied(.9);
+   h_->setMapUpdateMinDistDiff(declare_parameter("map_update_distance_thresh",.2));
+   h_->setMapUpdateMinAngleDiff(declare_parameter("map_update_angle_thresh",.08));
++  voxel_=declare_parameter("cloud_voxel_size",0.);
+   const double min=declare_parameter("laser_min_dist",.5);min2_=min*min;max2_=30.*30.;
+   map_pub_=create_publisher<nav_msgs::msg::OccupancyGrid>("map",rclcpp::QoS(1).transient_local().reliable());
+   pose_pub_=create_publisher<geometry_msgs::msg::PoseStamped>("pose",1000);
+@@ -55,6 +57,7 @@
+   hectorslam::DataContainer data;
+   const tf2::Vector3 laserPos=laser_transform.getOrigin();const float scale=h_->getScaleToMap();
+   data.setOrigo(Eigen::Vector2f(laserPos.x(),laserPos.y())*scale);
++  cartographer::sensor::PointCloud points;
+   sensor_msgs::PointCloud2ConstIterator<float>x(cloud,"x"),y(cloud,"y"),z(cloud,"z");
+   for(size_t i=0;i<cloud.width*cloud.height;++i,++x,++y,++z){
+    // Keep upstream order, strict inequalities, rear near-field removal,
+@@ -64,9 +67,11 @@
+     if(*x<0.f && dist_sqr<.50f)continue;
+     const tf2::Vector3 point=laser_transform*tf2::Vector3(*x,*y,*z);
+     const float relative_z=point.z()-laserPos.z();
+-    if(relative_z>-1.f && relative_z<1.f)data.add(Eigen::Vector2f(point.x(),point.y())*scale);
++    if(relative_z>-1.f && relative_z<1.f)points.push_back({Eigen::Vector3f(point.x(),point.y(),point.z())});
+    }
+   }
++  if(voxel_>0)points=cartographer::sensor::VoxelFilter(points,voxel_);
++  for(const auto&point:points)data.add(point.position.head<2>()*scale);
+   // Exact upstream default initial estimate: previous matched pose, no gyro yaw.
+   h_->update(data,h_->getLastScanMatchPose());
+   const auto pose=h_->getLastScanMatchPose();if(!pose.allFinite())throw std::runtime_error("Nonfinite upstream result");
+@@ -89,7 +94,7 @@
+  }
+  struct Pending{sensor_msgs::msg::LaserScan::ConstSharedPtr scan;std::chrono::steady_clock::time_point arrival;};
+  std::deque<Pending>pending_;std::unique_ptr<hectorslam::HectorSlamProcessor>h_;laser_geometry::LaserProjection projector_;
+- tf2_ros::Buffer buffer_;tf2_ros::TransformListener listener_;std::string base_,map_frame_;double min2_,max2_;int map_index_=-100;size_t dropped_=0;
++ tf2_ros::Buffer buffer_;tf2_ros::TransformListener listener_;std::string base_,map_frame_;double min2_,max2_,voxel_;int map_index_=-100;size_t dropped_=0;
+  builtin_interfaces::msg::Time last_stamp_;nav_msgs::msg::OccupancyGrid map_;
+  rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr scan_sub_;
+  rclcpp::Publisher<nav_msgs::msg::OccupancyGrid>::SharedPtr map_pub_;rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pose_pub_;rclcpp::Publisher<std_msgs::msg::String>::SharedPtr status_pub_;

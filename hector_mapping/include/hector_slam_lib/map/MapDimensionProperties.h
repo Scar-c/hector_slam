@@ -44,7 +44,7 @@ public:
     , mapDimensions(mapDimensionsIn)
     , cellLength(cellLengthIn)
   {
-    mapLimitsf = (mapDimensionsIn.cast<float>()).array() - 1.0f;
+    mapLimitsf = (mapDimensionsIn.cast<float>()).array() - 2.0f;
   }
 
   bool operator==(const MapDimensionProperties& other) const
@@ -64,7 +64,7 @@ public:
 
   bool pointOutOfMapBounds(const Eigen::Vector2f& coords) const
   {
-    return ((coords[0] < 0.0f) || (coords[0] > mapLimitsf[0]) || (coords[1] < 0.0f) || (coords[1] > mapLimitsf[1]));
+    return ((!coords.allFinite()) || (coords[0] < 0.0f) || (coords[0] > mapLimitsf[0]) || (coords[1] < 0.0f) || (coords[1] > mapLimitsf[1]));
   }
 
   void setMapCellDims(const Eigen::Vector2i& newDims)

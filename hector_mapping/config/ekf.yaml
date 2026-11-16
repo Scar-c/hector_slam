@@ -1,0 +1,66 @@
+ekf_filter_node:
+  ros__parameters:
+    frequency: 50.0              # 滤波器更新频率 (Hz)
+    sensor_timeout: 0.3          # 传感器超时时间 (s)
+    two_d_mode: true             # 假设平面运动
+    transform_time_offset: 0.0   # 变换时间偏移
+    transform_timeout: 0.0       # 变换超时
+    print_diagnostics: true      # 打印诊断信息
+    debug: false                 # 禁用调试模式
+
+    ##################################################################################
+    # 坐标系设置
+    map_frame: map
+    odom_frame: odom
+    base_link_frame: base_link
+    # world_frame 决定了输出的 /odometry/filtered 消息的 header.frame_id 以及 EKF 发布的 TF 变换的父坐标系
+    world_frame: odom
+
+    ##################################################################################
+    # 轮式里程计输入
+    odom0: /wheel_odom
+    odom0_config: [false, false, false,    # x, y, z position
+                   false, false, false,   # roll, pitch, yaw
+                   true, false, false,   # x vel, y vel, z vel
+                   false, false, true,   # roll vel, pitch vel, yaw vel
+                   false, false, false]  # x accel, y accel, z accel
+    odom0_differential: false
+    odom0_queue_size: 10
+
+    # IMU 输入
+    imu0: /imu
+    imu0_config: [false, false, false,   # x, y, z
+                  false, false, true,    # roll, pitch, yaw
+                  false, false, false,   # x vel, y vel, z vel
+                  false, false, true,    # roll vel, pitch vel, yaw vel
+                  true, false, false]   # x accel, y accel, z accel
+    imu0_differential: false
+    imu0_queue_size: 10
+    imu0_remove_gravitational_acceleration: true
+
+    # 协方差（根据实际传感器调整）
+    odom0_pose_covariance: [1e6, 0.0, 0.0, 0.0, 0.0, 0.0,
+                            0.0, 1e6, 0.0, 0.0, 0.0, 0.0,
+                            0.0, 0.0, 1e6, 0.0, 0.0, 0.0,
+                            0.0, 0.0, 0.0, 1e6, 0.0, 0.0,
+                            0.0, 0.0, 0.0, 0.0, 1e6, 0.0,
+                            0.0, 0.0, 0.0, 0.0, 0.0, 1e6]
+    odom0_twist_covariance: [1e-6, 0.0, 0.0, 0.0, 0.0, 0.0,
+                             0.0, 1e6, 0.0, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 1e6, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 1e6, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 0.0, 1e6, 0.0,
+                             0.0, 0.0, 0.0, 0.0, 0.0, 1e-6]
+    imu0_pose_covariance: [1e6, 0.0, 0.0, 0.0, 0.0, 0.0,
+                            0.0, 1e6, 0.0, 0.0, 0.0, 0.0,
+                            0.0, 0.0, 1e6, 0.0, 0.0, 0.0,
+                            0.0, 0.0, 0.0, 1e6, 0.0, 0.0,
+                            0.0, 0.0, 0.0, 0.0, 1e6, 0.0,
+                            0.0, 0.0, 0.0, 0.0, 0.0, 1e-6]
+
+    imu0_twist_covariance: [1e6, 0.0, 0.0, 0.0, 0.0, 0.0,
+                            0.0, 1e6, 0.0, 0.0, 0.0, 0.0,
+                            0.0, 0.0, 1e6, 0.0, 0.0, 0.0,
+                            0.0, 0.0, 0.0, 1e6, 0.0, 0.0,
+                            0.0, 0.0, 0.0, 0.0, 1e6, 0.0,
+                            0.0, 0.0, 0.0, 0.0, 0.0, 1e-6]
