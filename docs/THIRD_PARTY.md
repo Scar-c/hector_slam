@@ -5,3 +5,5 @@
 - `hector_cloud_frontend` 链接 Cartographer 的 `ImuTracker` 与 `sensor::VoxelFilter` C++工具。Cartographer 为Apache-2.0；库由外部依赖提供，安装包遗漏的体素过滤API声明头以原样保留在`hector_cloud_frontend/third_party/cartographer`，附原许可证及SHA256。本仓库未冒充这些工具是Hector原生算法，也未复制/运行其建图后端。业务实验原来链接兼容的`zx_carto`。
 - `experiments/local_business_matrix/initializers` 调用业务工作区已有的 `AdaptiveFftMatcher`，需要其源目录、配置及FFTW/OpenCV等依赖。未将外部业务FFT核心复制进本仓库。
 - 离线指标使用evo1.38.1；其环境及二进制不打包进仓库。图像为本地实验输出，原始传感器bag不提交。
+
+2026-11-17在线版本：所需完整工具/后端源码已收进仓库`3rd/cartographer`，由`hector_backend_core`源码编译；原接口/插件来源在`3rd/cartographer_ros`，Hector消息和插件适配包自行编译。先前需要外部Cartographer安装前缀的方式由该自包含构建替代。原始许可证和来源清单保留。

@@ -1,0 +1,2 @@
+# Preserve upstream dependency source whitespace verbatim.
+3rd/** -whitespace

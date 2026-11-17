@@ -1,4 +1,50 @@
-# Hector SLAM — ROS 2 Jazzy 开发分支
+# Hector SLAM — ROS 2 Jazzy 在线版本
+
+## 一键安装构建（无需预装 Cartographer）
+
+本机入口：
+
+```bash
+bash /home/lc/hector_slam_ros2/install.sh
+source /home/lc/hector_slam_ros2/install_online/setup.bash
+bash /home/lc/hector_slam_ros2/run_online.sh output_directory:=/absolute/new_result
+```
+
+新机器克隆后，在仓库根目录执行：`bash scripts/install.sh --workspace /absolute/hector_ws`。安装器会生成该工作空间根目录的 `install.sh` 和 `run_online.sh` 入口。脚本检查并安装缺失的通用系统开发包，依赖deb缓存放入`3rd/debs`，清除外部overlay后编译全部在线包。先安装ROS2 Jazzy；不需要安装或source Cartographer、cartographer_ros或ZX工作区。`--dry-run`只检查，`--skip-system-deps`在系统依赖已具备时跳过apt。
+
+- 工作空间`3rd`入口指向仓库`3rd`，第三方源码随仓库保存，不依赖另一工作空间。
+- `hector_backend_core`：编译`3rd/cartographer`内的工具/位姿图源码。
+- `hector_backend_msgs`：本地子图消息/服务。
+- `hector_backend_rviz`：本地RViz子图插件。
+- `hector_backend`：在线后端、离线对照、launch及RViz配置。
+- `hector_cloud_frontend`：修复版Hector前端及去畸变。
+- `hector_mapping`、`hector_slam`：原有核心与元包。
+
+默认在线入口面向此前的b0水平MultiEcho+IMU背包。Hector位姿保留在`hector_local_map`，后端发布`map→hector_local_map`，前端不接受后端优化位姿回灌。RViz通过`/submap_list`、`/submap_query`显示子图，`/backend_path`显示优化轨迹；`/map`为合成地图。
+
+另一个终端（同一ROS_DOMAIN_ID，默认228）以1倍速播放原bag：
+
+```bash
+source /opt/ros/jazzy/setup.bash
+export ROS_DOMAIN_ID=228
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+ros2 bag play /absolute/bag --clock 200 --rate 1
+```
+
+结束后调用最终优化和保存：
+
+```bash
+source /home/lc/hector_slam_ros2/install_online/setup.bash
+export ROS_DOMAIN_ID=228
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+ros2 service call /finish_hector_backend std_srvs/srv/Trigger '{}'
+```
+
+Ceres、Eigen、Protobuf、Lua、Boost等属于通用系统依赖，由一键脚本安装；第三方SLAM源码属于工作空间内依赖。详见`docs/ONLINE_BACKEND.md`与`3rd/README.md`。
+
+---
+
+# 早期移植与离线验证记录
 
 本分支基于 `noetic-devel` 的 `a5e77fd3297055f5f0776ed56fafa60790494e98`，保留 Hector 多分辨率 Gauss–Newton 匹配，迁移到 ROS 2 Jazzy，并加入固定 PGM/YAML 地图定位、EKF 预测及扫描时间补偿、最终 XYZ/重力/体素输入前处理。
 
@@ -47,11 +93,11 @@ ros2 launch hector_mapping localization.launch.py map:=/absolute/map.yaml use_si
 
 ## 最终 XYZ 前处理
 
-需要额外安装/构建 Cartographer C++ 库并 source 其前缀；不需要启动 Cartographer 节点。默认链接 `cartographer`，业务兼容库可用 `-DHECTOR_CARTOGRAPHER_PACKAGE=zx_carto` 明确选择。
+当前版本已改用仓库 `3rd` 内源码编译的 `hector_backend_core`，不再需要外部 Cartographer 前缀或 `HECTOR_CARTOGRAPHER_PACKAGE` 参数。先执行上方一键安装，然后使用 `install_online` 环境。
 
 ```bash
-colcon build --packages-select hector_cloud_frontend --cmake-args -DCMAKE_BUILD_TYPE=Release
-source install/setup.bash
+bash scripts/install.sh --workspace ~/hector_ws
+source ~/hector_ws/install_online/setup.bash
 ros2 launch hector_cloud_frontend localization_ekf_xyz.launch.py \
   map:=/absolute/map.yaml use_sim_time:=true \
   robot_description_file:=/absolute/robot.urdf \

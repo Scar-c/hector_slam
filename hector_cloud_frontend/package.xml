@@ -10,7 +10,7 @@
   <depend>hector_mapping</depend>
   <depend>eigen</depend>
   <depend>yaml-cpp</depend>
-  <depend>cartographer</depend>
+  <depend>hector_backend_core</depend>
   <depend>rclcpp</depend>
   <depend>rcl_interfaces</depend>
   <depend>sensor_msgs</depend>

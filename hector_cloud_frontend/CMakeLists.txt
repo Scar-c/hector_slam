@@ -16,13 +16,11 @@ find_package(std_srvs REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
-# The experiments used the compatible zx_carto library. Upstream Cartographer
-# is the default dependency for a standalone checkout; no SLAM backend is run.
-set(HECTOR_CARTOGRAPHER_PACKAGE cartographer CACHE STRING "Cartographer library package/target")
-find_package(${HECTOR_CARTOGRAPHER_PACKAGE} REQUIRED)
+find_package(hector_backend_core REQUIRED)
+set(HECTOR_CARTOGRAPHER_PACKAGE hector_backend_core::hector_backend_core)
 foreach(target hector_cloud_mapping_node hector_cloud_localization_node)
   add_executable(${target} src/${target}.cpp)
-  target_include_directories(${target} PRIVATE third_party/cartographer/include ${hector_mapping_INCLUDE_DIRS})
+  target_include_directories(${target} PRIVATE ${hector_mapping_INCLUDE_DIRS})
   target_link_libraries(${target} Eigen3::Eigen yaml-cpp ${HECTOR_CARTOGRAPHER_PACKAGE}
     hector_mapping::hector_mapping__rosidl_typesupport_cpp)
   ament_target_dependencies(${target} hector_mapping rclcpp rcl_interfaces sensor_msgs geometry_msgs nav_msgs std_msgs std_srvs tf2 tf2_ros tf2_geometry_msgs)
@@ -37,6 +35,5 @@ install(TARGETS hector_cloud_mapping_node hector_cloud_localization_node hector_
   DESTINATION lib/${PROJECT_NAME})
 install(PROGRAMS scripts/seed_pose.py DESTINATION lib/${PROJECT_NAME})
 install(DIRECTORY launch config DESTINATION share/${PROJECT_NAME})
-install(DIRECTORY third_party/cartographer DESTINATION share/${PROJECT_NAME}/third_party)
 install(FILES LICENSE DESTINATION share/${PROJECT_NAME})
 ament_package()

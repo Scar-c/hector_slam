@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<package format="3">
+ <name>hector_backend_core</name><version>0.6.0</version><description>Workspace-local Cartographer-derived pose graph and sensor utilities for Hector.</description>
+ <maintainer email="241061258+Scar-c@users.noreply.github.com">Scar-c</maintainer><license>Apache-2.0</license>
+ <buildtool_depend>ament_cmake</buildtool_depend><depend>eigen</depend><depend>libceres-dev</depend><depend>libboost-iostreams-dev</depend><depend>libabsl-dev</depend><depend>protobuf-dev</depend><depend>libgoogle-glog-dev</depend><depend>libgflags-dev</depend><depend>lua5.3-dev</depend><depend>libcairo2-dev</depend><build_depend>pkg-config</build_depend>
+ <export><build_type>ament_cmake</build_type></export>
+</package>

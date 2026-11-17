@@ -1,0 +1,31 @@
+{
+  "frames": 6138,
+  "local_input_identical": true,
+  "optimized_arrays_identical": true,
+  "max_xy_difference_m": 0.0,
+  "rmse_xy_difference_m": 0.0,
+  "old_backend": {
+    "input_frames": 18932,
+    "nodes": 6138,
+    "submaps": 69,
+    "loop_constraints": 1743,
+    "intra_constraints": 12186,
+    "map_resolution": 0.05,
+    "map_origin_pixel": [
+      1839.4,
+      2644.47
+    ]
+  },
+  "vendored_backend": {
+    "input_frames": 18932,
+    "nodes": 6138,
+    "submaps": 69,
+    "loop_constraints": 1743,
+    "intra_constraints": 12186,
+    "map_resolution": 0.05,
+    "map_origin_pixel": [
+      1839.4,
+      2644.47
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "1.0": {
+    "relative_translation_median_m": 0.0007875236961039962,
+    "relative_translation_p95_m": 0.004043215863071792,
+    "relative_yaw_p95_deg": 0.31723267108693987
+  },
+  "5.0": {
+    "relative_translation_median_m": 0.005640043431239651,
+    "relative_translation_p95_m": 0.05805816514473371,
+    "relative_yaw_p95_deg": 1.4121749735151976
+  }
+}

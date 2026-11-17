@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "real_playback_rate": 1,
+  "duration_s": 30.0,
+  "rviz_requested": false,
+  "counts": {
+    "/hector_matching_points": 1123,
+    "/slam_out_pose": 1123,
+    "/submap_list": 69,
+    "/backend_status": 69,
+    "/map": 17
+  },
+  "backend": {
+    "frames": 1123,
+    "nodes": 201,
+    "submaps": 3,
+    "finished": true
+  },
+  "submap_count_progression_unique": [
+    1,
+    2,
+    3
+  ],
+  "texture_query": {
+    "status": 0,
+    "width": 413,
+    "height": 1016,
+    "decoded_bytes": 839216
+  },
+  "frontend_frame": "hector_local_map",
+  "backend_frame": "map",
+  "external_cartographer_prefix_required": false
+}

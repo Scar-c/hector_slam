@@ -12,3 +12,5 @@ outputs/
 *.bag
 *.db3
 *.pbstream
+
+3rd/debs/*.deb

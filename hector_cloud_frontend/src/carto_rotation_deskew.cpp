@@ -33,6 +33,7 @@ class Deskew : public rclcpp::Node {
  public:
   Deskew() : Node("carto_rotation_deskew"), buffer_(get_clock()), listener_(buffer_) {
     single_=declare_parameter<bool>("single_scan",true);
+    pose_frame_=declare_parameter<std::string>("historical_pose_frame","map");
     frame_=declare_parameter<std::string>("tracking_frame","base_link");
     max_skew_=declare_parameter<double>("max_pair_skew_sec",.1);
     max_gap_=declare_parameter<double>("max_imu_gap_sec",.03);
@@ -77,13 +78,14 @@ class Deskew : public rclcpp::Node {
     RCLCPP_INFO(get_logger(),"Cartographer ImuTracker + causal historical pose constant velocity; no Cartographer matching, maps, odometry, or TF publication");
   }
  private:
+  std::string pose_frame_;
   rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr attitude_pub_;
   void resetVelocity(){velocities_.clear();previous_pose_.reset();++velocity_resets_;}
   void amclPose(geometry_msgs::msg::PoseWithCovarianceStamped::ConstSharedPtr m){
     if(!translation_)return;
     const auto &p=m->pose.pose.position;const auto &o=m->pose.pose.orientation;
     Eigen::Vector3d position(p.x,p.y,p.z);Eigen::Quaterniond q(o.w,o.x,o.y,o.z);
-    if(m->header.frame_id!="map" || !position.allFinite() || !q.coeffs().allFinite() || std::abs(q.norm()-1)>.01 ||
+    if(m->header.frame_id!=pose_frame_ || !position.allFinite() || !q.coeffs().allFinite() || std::abs(q.norm()-1)>.01 ||
        !std::isfinite(m->pose.covariance[0]) || !std::isfinite(m->pose.covariance[7]) ||
        m->pose.covariance[0]<0 || m->pose.covariance[7]<0 ||
        std::max(m->pose.covariance[0],m->pose.covariance[7])>.25){resetVelocity();return;}
