@@ -87,6 +87,11 @@ map --后端全局校正--> hector_local_map --Hector原始局部位姿--> base_
 - `/backend_path`：当前优化后图节点轨迹。
 - `/map`：合成占据栅格。
 - `/backend_status`：接收帧、图节点、子图数和完成状态。
+- 默认青色 `Hector matching input`（`/hector_matching_points`）：实际进入Hector匹配的去畸变、高度过滤及体素过滤后点云，显示为地图平面上的匹配点。
+- 可选橙色 `Deskewed input XYZ`（`/points_carto`）：去畸变后、进入Hector过滤前的XYZ点云。
+- 可选灰色 `Raw input XYZ`（`/points_carto_raw`）：未去畸变的输入点云，用于对比。后两项默认关闭，可在Displays中勾选。
+
+点云使用Best Effort/Volatile订阅，并通过扫描时刻TF显示到map；Decay Time为0，只显示当前帧。
 
 RViz默认显示分块子图与优化轨迹；子图位姿随后端优化更新，历史子图整体平移/旋转。验证中插件成功加载，子图逐步增长且纹理查询/解压通过。地图更新和节点跟踪为实际在线订阅处理，不是展示预先优化好的最终图。
 

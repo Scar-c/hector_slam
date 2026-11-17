@@ -59,6 +59,69 @@ Visualization Manager:
     Line Style: Lines
     Alpha: 1
     Value: true
+  - Class: rviz_default_plugins/PointCloud2
+    Enabled: true
+    Name: Hector matching input
+    Topic:
+      Value: /hector_matching_points
+      Depth: 5
+      History Policy: Keep Last
+      Reliability Policy: Best Effort
+      Durability Policy: Volatile
+    Queue Size: 20
+    Style: Flat Squares
+    Size (m): 0.045
+    Size (Pixels): 3
+    Alpha: 1
+    Color Transformer: FlatColor
+    Color: 0; 255; 255
+    Position Transformer: XYZ
+    Decay Time: 0
+    Selectable: true
+    Use Fixed Frame: true
+    Value: true
+  - Class: rviz_default_plugins/PointCloud2
+    Enabled: false
+    Name: Deskewed input XYZ (optional)
+    Topic:
+      Value: /points_carto
+      Depth: 5
+      History Policy: Keep Last
+      Reliability Policy: Best Effort
+      Durability Policy: Volatile
+    Queue Size: 20
+    Style: Flat Squares
+    Size (m): 0.045
+    Size (Pixels): 3
+    Alpha: 1
+    Color Transformer: FlatColor
+    Color: 255; 170; 0
+    Position Transformer: XYZ
+    Decay Time: 0
+    Selectable: true
+    Use Fixed Frame: true
+    Value: false
+  - Class: rviz_default_plugins/PointCloud2
+    Enabled: false
+    Name: Raw input XYZ (optional)
+    Topic:
+      Value: /points_carto_raw
+      Depth: 5
+      History Policy: Keep Last
+      Reliability Policy: Best Effort
+      Durability Policy: Volatile
+    Queue Size: 20
+    Style: Flat Squares
+    Size (m): 0.045
+    Size (Pixels): 3
+    Alpha: 1
+    Color Transformer: FlatColor
+    Color: 200; 200; 200
+    Position Transformer: XYZ
+    Decay Time: 0
+    Selectable: true
+    Use Fixed Frame: true
+    Value: false
   - Class: rviz_default_plugins/Map
     Enabled: false
     Name: Combined occupancy map

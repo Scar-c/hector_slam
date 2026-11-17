@@ -1,0 +1,9 @@
+{
+  "rviz_subscribers": [
+    "rviz"
+  ],
+  "qos": "Best Effort",
+  "cloud_frame": "base_link",
+  "scan_time_tf_checks": 30,
+  "passed": true
+}
