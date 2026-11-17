@@ -1,0 +1,47 @@
+# Map2Map C++ 匹配器配置
+
+map_input:
+  # 服务启动后尚未收到 /map 时，单次请求的最长等待时间。
+  wait_timeout_seconds: 30.0
+
+frames:
+  # 用于查询 map -> base_frame，并输出机器人在主地图中的全局位姿。
+  base_frame: "base_link"
+
+pointcloud:
+  main_downsample_factor: 1
+  sub_downsample_factor: 1
+  target_downsample_factor: 1
+
+rotation_model:
+  # 全 360 度搜索的角度步长（度）。
+  rotation_step: 0.3
+
+adaptive_fft:
+  # 主地图包围盒尺寸乘以该系数后作为 X/Y 的正负搜索半径。
+  search_range:
+    margin_factor: 1.2
+
+  maximum_workers: 10
+
+  resolution:
+    coarse: 0.9
+    fine: 0.3
+    steps: 3
+
+  input_quality:
+    min_small_points: 1000
+    min_fine_occupied_cells: 25
+    min_coarse_occupied_cells: 5
+    min_bbox_long_side_m: 1.5
+    min_bbox_area_m2: 0.8
+
+  candidate_retention:
+    ratio: 0.33
+    min_count: 5
+
+match_probability:
+  sigma: 0.20
+  cell_size: 0.20
+  search_radius: 0.40
+  source_downsample: 2

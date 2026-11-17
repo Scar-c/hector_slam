@@ -1,0 +1,37 @@
+{
+  "run_directory": "/home/lc/hector_slam_ros2/results/backpack_fixed_prior_20261117_145559",
+  "frontend": "same repaired mapping XYZ/IMU/causal translation deskew/height/0.025m voxel chain",
+  "initializer": "business FFT full-map XY and 360 yaw; no supplied manual initial pose",
+  "backend_optimization": false,
+  "score_policy": "record_only",
+  "status_frames": 18934,
+  "accepted_frames": 18934,
+  "rejected_frames": 0,
+  "below_045_frames": 746,
+  "minimum_match_score": 0.153538108,
+  "raw_pose_count": 18934,
+  "covered_seconds": 513.5801107883453,
+  "playback_rate": 1,
+  "reference_for_evaluation_only": "/home/lc/hector_slam_ros2/hybrid_backend/results/full_default/trajectory_optimized.tum",
+  "reference_is_independent_truth": false,
+  "alignment": "none; common map coordinates",
+  "map_immutable": true,
+  "all": {
+    "poses": 18934,
+    "interpolated_reference_xy_rmse_m": 0.02422339211201201,
+    "maximum_xy_difference_m": 0.5871972829413592,
+    "last_xy_difference_m": 0.0062532789898209285
+  },
+  "370_to_377s": {
+    "poses": 265,
+    "interpolated_reference_xy_rmse_m": 0.05316168992672532,
+    "maximum_xy_difference_m": 0.31137999807280015,
+    "last_xy_difference_m": 0.02474332702217024
+  },
+  "unpaired_cloud_drops": 0,
+  "fatal_errors": 0,
+  "latency_p50_s": 0.0015716552734375,
+  "latency_p95_s": 0.006010770797729492,
+  "latency_max_s": 0.05646657943725586,
+  "last_cloud_has_map_transform": 1
+}

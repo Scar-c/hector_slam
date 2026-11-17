@@ -1,0 +1,21 @@
+{
+  "stats": {
+    "rmse": 0.02226242789498514,
+    "mean": 0.014966604763973377,
+    "median": 0.011808184133463025,
+    "std": 0.01648078995735404,
+    "min": 0.00020145060518297566,
+    "max": 0.4455093987492764,
+    "sse": 3.0420891406940336
+  },
+  "info": {
+    "title": "APE w.r.t. translation part (m)\n(not aligned)\n(projected to xy plane)",
+    "ref_name": "/home/lc/hector_slam_ros2/hybrid_backend/results/full_default/trajectory_optimized.tum",
+    "est_name": "/home/lc/hector_slam_ros2/results/backpack_fixed_prior_20261117_145559/trajectory_localization.tum",
+    "label": "APE (m)"
+  },
+  "reference": "map-generating optimized node trajectory; not independent ground truth",
+  "alignment": "none",
+  "timestamp_max_diff_s": 0.04,
+  "project_to_plane": "xy"
+}

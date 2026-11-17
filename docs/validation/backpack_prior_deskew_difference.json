@@ -1,0 +1,21 @@
+{
+  "paired_clouds": 558,
+  "aggregate": {
+    "mean_cloud_rms_m": 0.030725781244182404,
+    "max_point_difference_m": 0.37131720781326294,
+    "frames_with_changes": 558,
+    "translation_valid_fraction": 0.9605734767025089
+  },
+  "representative_status": {
+    "reference_stamp_ns": 1405076464686703182,
+    "source_first_stamp_ns": 1405076464667987900,
+    "velocity_pose_stamp_ns": 1405076464660792982,
+    "rotation_enabled": true,
+    "translation_enabled": true,
+    "translation_valid": true,
+    "clouds": 558,
+    "dropped": 0,
+    "points": 1011
+  },
+  "configured_display_point_size_m": 0.045
+}

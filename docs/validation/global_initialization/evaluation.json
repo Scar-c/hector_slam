@@ -1,0 +1,51 @@
+{
+  "reference_used_for_evaluation_only": "/home/lc/hector_slam_ros2/hybrid_backend/results/full_default/trajectory_optimized.tum",
+  "reference_is_algorithm_output_not_ground_truth": true,
+  "reference_first_pose": [
+    0.006693693736297676,
+    0.005220553416969266,
+    -0.000988480734195967
+  ],
+  "searches_completed_before_reference_evaluation": true,
+  "results": [
+    {
+      "method": "fcsm",
+      "pose": [
+        -9.47000122,
+        -0.326499939,
+        0
+      ],
+      "position_difference_m": 9.482498878097733,
+      "yaw_difference_deg": 0.056635774199421854,
+      "total_s": 75.617290459,
+      "search_s": 74.349787017,
+      "correct_region_vs_map_record": false
+    },
+    {
+      "method": "fft",
+      "pose": [
+        -0.0809936523,
+        -0.0331420898,
+        0
+      ],
+      "position_difference_m": 0.09571187517482817,
+      "yaw_difference_deg": 0.056635774199421854,
+      "total_s": 3.03244965,
+      "search_s": 2.707216573,
+      "correct_region_vs_map_record": true
+    },
+    {
+      "method": "hector_search",
+      "pose": [
+        -9.45050049,
+        -0.340343475,
+        -0.0060341996140778065
+      ],
+      "position_difference_m": 9.463505498842984,
+      "yaw_difference_deg": 0.2890983964267066,
+      "total_s": 3.361754501,
+      "search_s": 3.037561463,
+      "correct_region_vs_map_record": false
+    }
+  ]
+}

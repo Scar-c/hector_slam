@@ -1,0 +1,12 @@
+{
+  "map_yaml": "/home/lc/hector_slam_ros2/data/prior_hector_backend/map.yaml",
+  "yaml_sha256": "e7d9b423911a169474ab94e6898109c128eca2c4abd4e8cc19b725142a8d95c6",
+  "pgm_sha256": "cf22113a25873ec3d51514ab5856500499cbf9b137fb0e3212a622171face038",
+  "scan": "/home/lc/hector_slam_ros2/data/global_initialization/first_scan.xy",
+  "scan_sha256": "c2e32d267ccb16ffcf29df93f24039d348d2bdf77810d2b3311270ca18674b37",
+  "manual_initial_pose": false,
+  "scope": "entire map XY and 360deg yaw for every method",
+  "reference_trajectory_input": false,
+  "serial_execution": true,
+  "timeout_per_method_s": 300
+}

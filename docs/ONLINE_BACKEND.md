@@ -117,3 +117,5 @@ RViz默认显示分块子图与优化轨迹；子图位姿随后端优化更新�
 在线重新运行的Hector轨迹与此前冻结记录有差异：历史位姿参与前处理的回调到达时序可改变可用历史速度，不能把新鲜实时重跑声称为逐帧确定性复现。严格等价结论只用于相同冻结输入下的前后端库对照。未用更接近Cartographer轨迹作为版本选优标准；局部结构、回访一致性和全局漂移收敛是主要观察项。
 
 验证脚本：`tools/validation/check_online_backpack.py`。本机结果在`online_validation/full`、`online_validation/offline_equivalence_full`、`online_validation/save_map30`。本阶段尚未把在线图做成pbstream持久化/恢复功能，也没有新增实车定位控制接口。
+
+固定先验全局初始化与无后端定位，见 [GLOBAL_RELOCALIZATION.md](GLOBAL_RELOCALIZATION.md)。一键安装器也编译该全局搜索工具，使用额外通用系统依赖FFTW3/OpenCV。

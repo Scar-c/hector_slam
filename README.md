@@ -42,6 +42,8 @@ ros2 service call /finish_hector_backend std_srvs/srv/Trigger '{}'
 
 Ceres、Eigen、Protobuf、Lua、Boost等属于通用系统依赖，由一键脚本安装；第三方SLAM源码属于工作空间内依赖。详见`docs/ONLINE_BACKEND.md`与`3rd/README.md`。
 
+固定地图全局初始化与背包重定位（无后端优化）见 [docs/GLOBAL_RELOCALIZATION.md](docs/GLOBAL_RELOCALIZATION.md)。
+
 ---
 
 # 早期移植与离线验证记录

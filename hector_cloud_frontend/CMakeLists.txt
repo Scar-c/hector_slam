@@ -33,7 +33,7 @@ foreach(target hector_reference_attitude hector_carto_deskew)
 endforeach()
 install(TARGETS hector_cloud_mapping_node hector_cloud_localization_node hector_reference_attitude hector_carto_deskew
   DESTINATION lib/${PROJECT_NAME})
-install(PROGRAMS scripts/seed_pose.py DESTINATION lib/${PROJECT_NAME})
+install(PROGRAMS scripts/seed_pose.py scripts/localization_visualizer.py DESTINATION lib/${PROJECT_NAME})
 install(DIRECTORY launch config DESTINATION share/${PROJECT_NAME})
 install(FILES LICENSE DESTINATION share/${PROJECT_NAME})
 ament_package()

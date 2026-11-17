@@ -47,6 +47,7 @@ public:
     search_radius_ = parameter("relocalization_xy_radius", 1.0);
     search_yaw_ = parameter("relocalization_yaw_radius", 0.35);
     min_score_ = parameter("localization_min_score", 0.45);
+    declare_parameter<bool>("enforce_localization_score",true);
     max_step_ = parameter("localization_max_step", 0.8);
     if (!std::isfinite(search_radius_) || search_radius_<0 || search_radius_>10 ||
         !std::isfinite(search_yaw_) || search_yaw_<0 || search_yaw_>M_PI ||
@@ -165,8 +166,8 @@ public:
     pose_pub_ = create_publisher<geometry_msgs::msg::PoseStamped>("slam_out_pose", 10);
     cov_pub_ = create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>(pose_topic, 10);
     if (pub_odom) odom_pub_ = create_publisher<nav_msgs::msg::Odometry>("scanmatch_odom", 10);
-    if(!use_imu_ || localization_only_ || use_odom_hint_ || use_pose_tf_ || odom_frame_!=base_frame_)
-      throw std::invalid_argument("This b0 cloud adapter requires mapping + exact reference attitude + no odometry");
+    if(!use_imu_ || use_odom_hint_ || use_pose_tf_ || odom_frame_!=base_frame_)
+      throw std::invalid_argument("This b0 cloud adapter requires exact reference attitude and no external odometry");
     reference_sub_=create_subscription<sensor_msgs::msg::Imu>("/deskew_reference_attitude",1000,[this](sensor_msgs::msg::Imu::ConstSharedPtr m){
       Eigen::Quaterniond q(m->orientation.w,m->orientation.x,m->orientation.y,m->orientation.z);
       if(m->header.frame_id!=base_frame_ || m->orientation_covariance[0]<0 || !q.coeffs().allFinite() || std::abs(q.norm()-1)>.001)return;
@@ -219,7 +220,7 @@ public:
           RCLCPP_WARN(get_logger(), "Rejected restart pose: %s", e.what());
         }
       });
-    pending_timer_ = create_wall_timer(10ms, [this] { processPendingScans(); });
+    pending_timer_ = create_wall_timer(10ms, [this] { processClouds(); processPendingScans(); });
     map_.info.map_load_time = now();
     map_timer_ = create_wall_timer(std::chrono::duration<double>(period), [this] { publishMap(); });
     publishMap();
@@ -232,11 +233,20 @@ private:
   void processClouds(){
     while(!clouds_.empty()){
       const auto cloud=clouds_.front();const auto t=rclcpp::Time(cloud->header.stamp).nanoseconds();
-      const auto it=references_.find(t);if(it==references_.end())return;
+      const auto it=references_.find(t);
+      if(it==references_.end()) {
+        if(!references_.empty() && references_.rbegin()->first-t>500000000LL) {
+          ++unpaired_clouds_;clouds_.pop_front();
+          RCLCPP_WARN(get_logger(),"Dropping unpaired cloud stamp=%ld: exact reference attitude missing; total=%lu",t,unpaired_clouds_);
+          continue;
+        }
+        return;
+      }
       const auto q=it->second;clouds_.pop_front();sensor_msgs::msg::LaserScan scan;scan.header=cloud->header;
       onScan(scan,cloud.get(),&q);references_.erase(references_.begin(),references_.upper_bound(t));
     }
   }
+  uint64_t unpaired_clouds_=0;
   double voxel_size_;
   Eigen::Vector3d ray_origin_;
   std::map<int64_t,Eigen::Quaterniond> references_;
@@ -461,7 +471,7 @@ private:
       }
       used.is_dense=true;matching_pub_->publish(used);
       std_msgs::msg::String status;std::ostringstream os;
-      os<<"{\"stamp_ns\":"<<stamp.nanoseconds()<<",\"reference_stamp_ns\":"<<stamp.nanoseconds()<<",\"raw_points\":"<<before<<",\"cropped_points\":"<<cropped<<",\"voxel_points\":"<<filtered.size()<<"}";
+      os<<"{\"stamp_ns\":"<<stamp.nanoseconds()<<",\"reference_stamp_ns\":"<<stamp.nanoseconds()<<",\"raw_points\":"<<before<<",\"cropped_points\":"<<cropped<<",\"voxel_points\":"<<filtered.size()<<",\"unpaired_clouds\":"<<unpaired_clouds_<<"}";
       status.data=os.str();cloud_status_pub_->publish(status);
       converted=data_.getSize()>=min_points_;
     } else converted=hector_mapping_ros2::convertScan(scan,base_from_laser,processor_->getScaleToMap(),min_range_,max_range_,z_min_,z_max_,data_);
@@ -473,12 +483,15 @@ private:
       const double score=prior_matcher_->score(data_,candidate);
       const double step=(candidate.head<2>()-hint.head<2>()).norm();
       const double yaw_step=std::abs(std::atan2(std::sin(candidate.z()-hint.z()),std::cos(candidate.z()-hint.z())));
-      const bool accepted=candidate.allFinite() && score>=min_score_ &&
+      const bool enforce_score=get_parameter("enforce_localization_score").as_bool();
+      const bool accepted=candidate.allFinite() && (!enforce_score || score>=min_score_) &&
         (needs_relocalization_ || (step<=max_step_ && yaw_step<=0.6));
       std_msgs::msg::String status;
       std::ostringstream json;
       json<<"{\"stamp\":"<<std::fixed<<std::setprecision(9)<<stamp.seconds()
           <<",\"score\":"<<score<<",\"accepted\":"<<(accepted?"true":"false")
+          <<",\"score_below_threshold\":"<<(score<min_score_?"true":"false")
+          <<",\"score_gate_enforced\":"<<(enforce_score?"true":"false")
           <<",\"relocalizing\":"<<(needs_relocalization_?"true":"false")<<",\"points\":"<<data_.getSize()<<"}";
       status.data=json.str(); localization_status_pub_->publish(status);
       if(!accepted) {

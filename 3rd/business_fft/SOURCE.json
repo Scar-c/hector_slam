@@ -1,0 +1,10 @@
+{
+  "origin": "/home/lc/ZHUXING_V2WS-local/src/algorithm/map2map_matcher/map2map_matcher",
+  "license_declared_by_source_package": "MIT",
+  "files": {
+    "include/map2map_matcher/core.hpp": "75cfea55a62d6893d6f2a87214dad1517f1ee985d6af438ea8b7016c60bcce4d",
+    "src/core.cpp": "7b04e2989f494e3a28c84fe33a0789fc86828ab304ee46a152e2edf85ba105e9",
+    "package.xml": "484b16df573922fbf30d404a9a4648f7a457178767951576ff7244305a3f67ac",
+    "config.yaml": "8eccdc8237bec283c25e4acb8da63ed1da302b16e7649fe9cde3dae1c5920081"
+  }
+}

@@ -45,6 +45,7 @@
 
 #include <float.h>
 #include <iostream>
+#include <memory>
 
 namespace hectorslam{
 
@@ -114,6 +115,7 @@ public:
   }
 
   void loadStaticMap(const std::vector<int8_t>& cells, int width, int height) {
+    staticCovarianceUtil.reset();
     static_cast<MapRepMultiMap*>(mapRep)->loadStaticMap(cells,width,height);
     localizationOnly=true;
     reset();
@@ -126,9 +128,12 @@ public:
     if(!localizationOnly) throw std::logic_error("No static map loaded");
     lastScanMatchPose=pose;
     // Evaluate the Hessian at the accepted pose without taking another optimizer step.
-    OccGridMapUtilConfig<GridMap> util(const_cast<GridMap*>(&mapRep->getGridMap(0)));
+    // A fixed map cannot change between accepted scans. Reuse its lookup cache;
+    // constructing it here per scan allocated/initialized the entire raster.
+    if (!staticCovarianceUtil) staticCovarianceUtil = std::make_unique<OccGridMapUtilConfig<GridMap>>(
+      const_cast<GridMap*>(&mapRep->getGridMap(0)));
     Eigen::Vector3f derivatives;
-    util.getCompleteHessianDerivs(mapRep->getGridMap(0).getMapCoordsPose(pose),data,lastScanMatchCov,derivatives);
+    staticCovarianceUtil->getCompleteHessianDerivs(mapRep->getGridMap(0).getMapCoordsPose(pose),data,lastScanMatchCov,derivatives);
   }
   bool isLocalizationOnly() const { return localizationOnly; }
 
@@ -161,6 +166,7 @@ public:
 
 protected:
 
+  std::unique_ptr<OccGridMapUtilConfig<GridMap>> staticCovarianceUtil;
   bool localizationOnly = false;
   MapRepresentationInterface* mapRep;
 

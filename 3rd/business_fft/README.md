@@ -1,0 +1,1 @@
+Snapshot of the user-owned business AdaptiveFftMatcher core. MIT is declared in the preserved upstream package.xml. The algorithm source is copied verbatim; FFTW and OpenCV are system dependencies. No business ROS service or external workspace is linked.

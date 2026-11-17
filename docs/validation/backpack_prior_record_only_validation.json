@@ -1,0 +1,25 @@
+{
+  "completed_bag": true,
+  "tracking_reached_bag_end": true,
+  "poses_received": 18934,
+  "clouds_received": 18934,
+  "last_status": {
+    "stamp": 1405076963.3260612,
+    "score": 0.820272803,
+    "accepted": true,
+    "score_below_threshold": false,
+    "score_gate_enforced": false,
+    "relocalizing": false,
+    "points": 893
+  },
+  "backend_nodes": [],
+  "rviz_left_open": true,
+  "latency_p50_s": 0.0015716552734375,
+  "latency_p95_s": 0.006010770797729492,
+  "latency_max_s": 0.05646657943725586,
+  "last_cloud_has_map_transform": 1,
+  "endpoint": [
+    -10.299896240234375,
+    -11.056652069091797
+  ]
+}

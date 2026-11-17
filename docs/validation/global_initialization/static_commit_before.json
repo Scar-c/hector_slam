@@ -1,0 +1,6 @@
+{
+  "repeated_commits": 10,
+  "new_array_allocations": 10,
+  "allocated_bytes": 740508160,
+  "elapsed_s": 0.296843
+}

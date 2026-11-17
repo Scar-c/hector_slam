@@ -7,3 +7,5 @@
 `debs/`: one-click installer cache for missing general system development dependencies (Ceres, Eigen, Protobuf, etc). Binary package cache is not committed. System ROS2 Jazzy and its regular dependencies remain required; there is no requirement for an installed Cartographer or cartographer_ros workspace.
 
 The workspace root `3rd` entry resolves to this directory, so cloning the repository preserves all third-party source dependencies.
+
+`business_fft/`: verbatim user-owned AdaptiveFftMatcher core snapshot, MIT declared in the preserved package.xml. Built with general FFTW3/OpenCV dependencies for scan-only global initialization; no external business workspace is linked. `fftw_prefix/` is an ignored local extraction of cached distro packages when available; fresh installations use libfftw3-dev.

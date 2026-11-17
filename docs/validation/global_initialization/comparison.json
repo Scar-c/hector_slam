@@ -1,0 +1,127 @@
+[
+  {
+    "method": "fcsm",
+    "map": "/home/lc/hector_slam_ros2/data/prior_hector_backend/map.yaml",
+    "scan": "/home/lc/hector_slam_ros2/data/global_initialization/first_scan.xy",
+    "source_points": 839,
+    "scope": "complete prior XY and 360 degree yaw; no pose input",
+    "map_import_occupied_threshold": 0.52,
+    "common_preprocessing_s": 0.318381609,
+    "algorithm_preprocessing_s": 0.94872486,
+    "branch_and_bound_depth": 8,
+    "resolution_m": 0.05000000074505806,
+    "fcsm_min_score": 0.45,
+    "native_score": 0.522407591,
+    "search_s": 74.349787017,
+    "returned_candidate": true,
+    "coarse_prior_pose": [
+      82.5,
+      59.5499992,
+      0
+    ],
+    "common_score_before_refine": 0.647408903,
+    "pose": [
+      -9.47000122,
+      -0.326499939,
+      0
+    ],
+    "common_match_score": 0.647408903,
+    "passes_match_threshold": true,
+    "refine_and_verify_s": 0.000396973,
+    "total_s": 75.617290459,
+    "process_wall_s": 75.74600196200117
+  },
+  {
+    "method": "fft",
+    "map": "/home/lc/hector_slam_ros2/data/prior_hector_backend/map.yaml",
+    "scan": "/home/lc/hector_slam_ros2/data/global_initialization/first_scan.xy",
+    "source_points": 839,
+    "scope": "complete prior XY and 360 degree yaw; no pose input",
+    "map_import_occupied_threshold": 0.52,
+    "common_preprocessing_s": 0.315186619,
+    "algorithm_preprocessing_s": 0.009662309,
+    "native_score": 111,
+    "rotation_step_degrees": 0.3,
+    "workers": 10,
+    "business_default_minimum_points": 1000,
+    "business_service_point_count_gate_passes": false,
+    "fft_scope": "Unmodified algorithm core; business service quality gate reported separately",
+    "stages": [
+      {
+        "stage": 1,
+        "elapsed_s": 0.665620849,
+        "resolution": 0.9,
+        "candidates": 1200,
+        "grid_width": 300,
+        "grid_height": 512
+      },
+      {
+        "stage": 2,
+        "elapsed_s": 1.012461601,
+        "resolution": 0.5196152422706632,
+        "candidates": 396,
+        "grid_width": 512,
+        "grid_height": 900
+      },
+      {
+        "stage": 3,
+        "elapsed_s": 0.984502438,
+        "resolution": 0.3,
+        "candidates": 130,
+        "grid_width": 900,
+        "grid_height": 1536
+      }
+    ],
+    "search_s": 2.707216573,
+    "returned_candidate": true,
+    "coarse_prior_pose": [
+      91.8890076,
+      59.8433571,
+      0
+    ],
+    "common_score_before_refine": 0.638416588,
+    "pose": [
+      -0.0809936523,
+      -0.0331420898,
+      0
+    ],
+    "common_match_score": 0.638416588,
+    "passes_match_threshold": true,
+    "refine_and_verify_s": 0.000384149,
+    "total_s": 3.03244965,
+    "process_wall_s": 3.140831843000342
+  },
+  {
+    "method": "hector_search",
+    "map": "/home/lc/hector_slam_ros2/data/prior_hector_backend/map.yaml",
+    "scan": "/home/lc/hector_slam_ros2/data/global_initialization/first_scan.xy",
+    "source_points": 839,
+    "scope": "complete prior XY and 360 degree yaw; no pose input",
+    "map_import_occupied_threshold": 0.52,
+    "common_preprocessing_s": 0.323796034,
+    "algorithm_preprocessing_s": 0.00012461,
+    "native_score": 0.619499266,
+    "evaluated_grid_candidates": 1450363,
+    "xy_step_m": 0.4,
+    "yaw_step_degrees": 10,
+    "retained_candidates": 48,
+    "search_s": 3.037561463,
+    "returned_candidate": true,
+    "coarse_prior_pose": [
+      82.5195007,
+      59.5361557,
+      -0.00603419961
+    ],
+    "common_score_before_refine": 0.619499266,
+    "pose": [
+      -9.45050049,
+      -0.340343475,
+      -0.0060341996140778065
+    ],
+    "common_match_score": 0.619499266,
+    "passes_match_threshold": true,
+    "refine_and_verify_s": 0.000272394,
+    "total_s": 3.361754501,
+    "process_wall_s": 3.4717987490002997
+  }
+]

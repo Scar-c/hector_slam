@@ -1,0 +1,8 @@
+{
+  "stamp_ns": 1405076449745950482,
+  "points": 839,
+  "source": "/home/lc/hector_slam_ros2/hybrid_backend/inputs/hector_fixed.bin",
+  "source_pose_fields": "SKIPPED, not loaded or supplied to any initializer",
+  "point_processing": "repaired Hector gravity-aligned, height-filtered, 0.025m voxel input",
+  "snapshot_sha256": "c2e32d267ccb16ffcf29df93f24039d348d2bdf77810d2b3311270ca18674b37"
+}
